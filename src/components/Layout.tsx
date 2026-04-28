@@ -29,13 +29,13 @@ export default function Layout() {
   }, [])
 
   const cur = findCurrentPeriod(periods, new Date())
-  // tick used to force re-render every 30s
   void tick
 
   return (
     <div className="flex h-full p-4 gap-4">
-      <aside className="w-60 shrink-0 glass rounded-3xl p-4 flex flex-col gap-1">
-        <div className="px-2 py-3 mb-2">
+      <aside className="w-60 shrink-0 glass rounded-3xl flex flex-col h-full overflow-hidden">
+        {/* 상단 고정 */}
+        <div className="px-4 pt-4 pb-2 shrink-0">
           <div className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">
             Class
           </div>
@@ -69,52 +69,60 @@ export default function Layout() {
             </div>
           )}
         </div>
-        {tabs.map((t) => (
+
+        {/* 메뉴 — 스크롤 영역 */}
+        <nav className="flex-1 overflow-y-auto px-4 py-1 flex flex-col gap-1 min-h-0">
+          {tabs.map((t) => (
+            <NavLink
+              key={t.to}
+              to={t.to}
+              end={t.to === '/'}
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition shrink-0 ${
+                  isActive
+                    ? 'bg-white/70 text-indigo-700 font-semibold shadow-sm border border-white/80'
+                    : 'text-slate-600 hover:bg-white/40'
+                }`
+              }
+            >
+              <span className="text-base">{t.icon}</span>
+              <span>{t.label}</span>
+            </NavLink>
+          ))}
+        </nav>
+
+        {/* 하단 고정 */}
+        <div className="px-4 pb-4 pt-2 shrink-0 border-t border-white/40">
           <NavLink
-            key={t.to}
-            to={t.to}
-            end={t.to === '/'}
+            to="/settings"
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition ${
                 isActive
-                  ? 'bg-white/70 text-indigo-700 font-semibold shadow-sm border border-white/80'
-                  : 'text-slate-600 hover:bg-white/40'
+                  ? 'text-indigo-700 font-semibold'
+                  : 'text-slate-500 hover:bg-white/40'
               }`
             }
           >
-            <span className="text-base">{t.icon}</span>
-            <span>{t.label}</span>
+            <span className="text-base">⚙️</span>
+            <span>설정</span>
           </NavLink>
-        ))}
-        <NavLink
-          to="/settings"
-          className={({ isActive }) =>
-            `mt-1 flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition border-t border-white/40 pt-3 ${
-              isActive
-                ? 'text-indigo-700 font-semibold'
-                : 'text-slate-500 hover:bg-white/40'
-            }`
-          }
-        >
-          <span className="text-base">⚙️</span>
-          <span>설정</span>
-        </NavLink>
-        <a
-          href="https://mumuclass.kr"
-          target="_blank"
-          rel="noreferrer noopener"
-          className="mt-2 flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition bg-gradient-to-br from-indigo-100/70 to-violet-100/70 hover:from-indigo-200/70 hover:to-violet-200/70 border border-white/70 group"
-        >
-          <span className="text-base">🌳</span>
-          <span className="flex-1 font-semibold text-indigo-700">
-            무궁무진클래스
-          </span>
-          <span className="text-xs text-indigo-400 group-hover:translate-x-0.5 transition-transform">
-            ↗
-          </span>
-        </a>
-        <div className="mt-2 text-[10px] text-slate-400 px-3 tracking-wide">
-          학기 동반자 · MVP
+          <a
+            href="https://mumuclass.kr"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="mt-1 flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition bg-gradient-to-br from-indigo-100/70 to-violet-100/70 hover:from-indigo-200/70 hover:to-violet-200/70 border border-white/70 group"
+          >
+            <span className="text-base">🌳</span>
+            <span className="flex-1 font-semibold text-indigo-700">
+              무궁무진클래스
+            </span>
+            <span className="text-xs text-indigo-400 group-hover:translate-x-0.5 transition-transform">
+              ↗
+            </span>
+          </a>
+          <div className="mt-2 text-[10px] text-slate-400 px-3 tracking-wide text-center">
+            학기 동반자 · MVP
+          </div>
         </div>
       </aside>
       <main className="flex-1 overflow-auto">
