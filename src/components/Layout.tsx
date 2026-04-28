@@ -99,6 +99,20 @@ export default function Layout() {
           <span className="text-base">⚙️</span>
           <span>설정</span>
         </NavLink>
+        <a
+          href="https://mumuclass.kr"
+          target="_blank"
+          rel="noreferrer noopener"
+          className="mt-2 flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition bg-gradient-to-br from-indigo-100/70 to-violet-100/70 hover:from-indigo-200/70 hover:to-violet-200/70 border border-white/70 group"
+        >
+          <span className="text-base">🌳</span>
+          <span className="flex-1 font-semibold text-indigo-700">
+            무궁무진클래스
+          </span>
+          <span className="text-xs text-indigo-400 group-hover:translate-x-0.5 transition-transform">
+            ↗
+          </span>
+        </a>
         <div className="mt-2 text-[10px] text-slate-400 px-3 tracking-wide">
           학기 동반자 · MVP
         </div>
