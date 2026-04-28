@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useStore } from '../store/students'
 
 export default function Roster() {
@@ -91,15 +92,25 @@ export default function Roster() {
           {students.map((s) => (
             <div
               key={s.id}
-              className="group flex items-center gap-2 px-3 py-2.5 rounded-xl glass-soft hover:glass transition"
+              className="group flex items-center gap-2 rounded-xl glass-soft hover:glass transition"
             >
-              <span className="w-7 h-7 flex items-center justify-center text-[11px] font-bold text-indigo-600 bg-white/60 rounded-lg">
-                {s.number}
-              </span>
-              <span className="flex-1 text-sm font-medium">{s.name}</span>
+              <Link
+                to={`/student/${s.id}`}
+                className="flex-1 flex items-center gap-2 px-3 py-2.5 min-w-0"
+              >
+                <span className="w-7 h-7 flex items-center justify-center text-[11px] font-bold text-indigo-600 bg-white/60 rounded-lg shrink-0">
+                  {s.number}
+                </span>
+                <span className="flex-1 text-sm font-medium truncate">
+                  {s.name}
+                </span>
+              </Link>
               <button
-                onClick={() => removeStudent(s.id)}
-                className="opacity-0 group-hover:opacity-100 text-slate-300 hover:text-red-500 text-xs transition"
+                onClick={() => {
+                  if (confirm(`${s.name} 학생을 명단에서 삭제할까요?`))
+                    removeStudent(s.id)
+                }}
+                className="opacity-0 group-hover:opacity-100 text-slate-300 hover:text-red-500 text-xs transition pr-3"
                 title="삭제"
               >
                 ✕

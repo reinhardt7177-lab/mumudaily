@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout'
 import Today from './pages/Today'
 import Roster from './pages/Roster'
+import Student from './pages/Student'
 import Homework from './pages/Homework'
 import Memos from './pages/Memos'
 import Checklist from './pages/Checklist'
@@ -23,6 +24,7 @@ export default function App() {
           <Route index element={<Today />} />
           <Route path="timetable" element={<Timetable />} />
           <Route path="roster" element={<Roster />} />
+          <Route path="student/:id" element={<Student />} />
           <Route path="homework" element={<Homework />} />
           <Route path="memos" element={<Memos />} />
           <Route path="checklist" element={<Checklist />} />

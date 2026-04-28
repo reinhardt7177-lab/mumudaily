@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useStore } from '../store/students'
 import {
   PRESET_TAGS,
@@ -327,12 +328,21 @@ function StudentDrawer({
       >
         <div className="flex items-center justify-between mb-1">
           <div className="text-xs text-slate-400">{student.number}번</div>
-          <button
-            onClick={onClose}
-            className="text-slate-400 hover:text-slate-700 text-sm"
-          >
-            ✕
-          </button>
+          <div className="flex items-center gap-2">
+            <Link
+              to={`/student/${student.id}`}
+              className="text-xs text-indigo-600 hover:underline"
+              onClick={onClose}
+            >
+              전체 보기 →
+            </Link>
+            <button
+              onClick={onClose}
+              className="text-slate-400 hover:text-slate-700 text-sm"
+            >
+              ✕
+            </button>
+          </div>
         </div>
         <h2 className="text-2xl font-bold mb-4">{student.name}</h2>
 
