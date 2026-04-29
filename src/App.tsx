@@ -12,6 +12,7 @@ import Groups from './pages/Groups'
 import Timetable from './pages/Timetable'
 import DDay from './pages/DDay'
 import QR from './pages/QR'
+import Whiteboard from './pages/Whiteboard'
 import Settings from './pages/Settings'
 import ChimeRunner from './components/ChimeRunner'
 
@@ -33,6 +34,7 @@ export default function App() {
           <Route path="timer" element={<Timer />} />
           <Route path="groups" element={<Groups />} />
           <Route path="qr" element={<QR />} />
+          <Route path="whiteboard" element={<Whiteboard />} />
           <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>

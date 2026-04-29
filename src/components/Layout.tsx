@@ -15,6 +15,7 @@ const tabs = [
   { to: '/timer', label: '시계 및 타이머', icon: '🕐' },
   { to: '/groups', label: '모둠 편성', icon: '🧩' },
   { to: '/qr', label: 'QR 코드', icon: '📱' },
+  { to: '/whiteboard', label: '판서', icon: '✏️' },
 ]
 
 export default function Layout() {
