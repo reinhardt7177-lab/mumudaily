@@ -155,10 +155,12 @@ function ChimePanel() {
   const enabled = useSettings((s) => s.chimeEnabled)
   const chimeStart = useSettings((s) => s.chimeStart)
   const chimeEnd = useSettings((s) => s.chimeEnd)
+  const chimePrewarn = useSettings((s) => s.chimePrewarn)
   const periods = useSettings((s) => s.periods)
   const setChimeEnabled = useSettings((s) => s.setChimeEnabled)
   const setChimeStart = useSettings((s) => s.setChimeStart)
   const setChimeEnd = useSettings((s) => s.setChimeEnd)
+  const setChimePrewarn = useSettings((s) => s.setChimePrewarn)
   const setPeriods = useSettings((s) => s.setPeriods)
   const reset = useSettings((s) => s.resetPeriods)
 
@@ -192,18 +194,30 @@ function ChimePanel() {
               onChange={setChimeEnd}
               compact
             />
-            <div className="flex gap-2 pt-1">
+            <Toggle
+              label="시작 1분 전 예비종"
+              on={chimePrewarn}
+              onChange={setChimePrewarn}
+              compact
+            />
+            <div className="flex gap-2 pt-1 flex-wrap">
               <button
-                onClick={() => playTestChime(false)}
+                onClick={() => playTestChime('start')}
                 className="px-3 py-1.5 rounded-lg glass-btn text-xs"
               >
                 ▶ 시업음 미리듣기
               </button>
               <button
-                onClick={() => playTestChime(true)}
+                onClick={() => playTestChime('end')}
                 className="px-3 py-1.5 rounded-lg glass-btn text-xs"
               >
                 ▶ 종업음 미리듣기
+              </button>
+              <button
+                onClick={() => playTestChime('prewarn')}
+                className="px-3 py-1.5 rounded-lg glass-btn text-xs"
+              >
+                ▶ 예비종 미리듣기
               </button>
             </div>
           </div>

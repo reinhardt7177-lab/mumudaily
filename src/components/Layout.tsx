@@ -3,6 +3,10 @@ import { useStore } from '../store/students'
 import { useEffect, useState } from 'react'
 import { findCurrentPeriod, useSettings } from '../store/settings'
 
+const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토']
+const fmtClock = (d: Date) =>
+  `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`
+
 const tabs = [
   { to: '/', label: '오늘', icon: '🌤️' },
   { to: '/timetable', label: '시간표', icon: '🗓️' },
@@ -24,11 +28,12 @@ export default function Layout() {
   const [tick, setTick] = useState(0)
 
   useEffect(() => {
-    const id = window.setInterval(() => setTick((t) => t + 1), 30_000)
+    const id = window.setInterval(() => setTick((t) => t + 1), 10_000)
     return () => clearInterval(id)
   }, [])
 
-  const cur = findCurrentPeriod(periods, new Date())
+  const now = new Date()
+  const cur = findCurrentPeriod(periods, now)
   void tick
 
   return (
@@ -36,6 +41,14 @@ export default function Layout() {
       <aside className="w-60 shrink-0 glass rounded-3xl flex flex-col h-full overflow-hidden">
         {/* 상단 고정 */}
         <div className="px-4 pt-4 pb-2 shrink-0">
+          <div className="flex items-baseline justify-between mb-3">
+            <div className="text-2xl font-bold tabular-nums tracking-tight text-slate-700">
+              {fmtClock(now)}
+            </div>
+            <div className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">
+              {WEEKDAYS[now.getDay()]}요일
+            </div>
+          </div>
           <div className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">
             Class
           </div>

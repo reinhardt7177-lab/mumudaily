@@ -21,10 +21,12 @@ type State = {
   chimeEnabled: boolean
   chimeStart: boolean // 시업
   chimeEnd: boolean // 종업
+  chimePrewarn: boolean // 시작 1분 전 예비종
   periods: PeriodTime[]
   setChimeEnabled: (v: boolean) => void
   setChimeStart: (v: boolean) => void
   setChimeEnd: (v: boolean) => void
+  setChimePrewarn: (v: boolean) => void
   setPeriods: (p: PeriodTime[]) => void
   resetPeriods: () => void
 }
@@ -35,10 +37,12 @@ export const useSettings = create<State>()(
       chimeEnabled: false,
       chimeStart: true,
       chimeEnd: false,
+      chimePrewarn: false,
       periods: DEFAULT_PERIODS,
       setChimeEnabled: (v) => set({ chimeEnabled: v }),
       setChimeStart: (v) => set({ chimeStart: v }),
       setChimeEnd: (v) => set({ chimeEnd: v }),
+      setChimePrewarn: (v) => set({ chimePrewarn: v }),
       setPeriods: (p) => set({ periods: p }),
       resetPeriods: () => set({ periods: DEFAULT_PERIODS }),
     }),
