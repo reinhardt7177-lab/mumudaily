@@ -35,16 +35,16 @@ export default function Timetable() {
   const school = useStore((s) => s.school)
   const setSchool = useStore((s) => s.setSchool)
 
-  const [grade, setGrade] = useState(school?.grade ?? '')
-  const [classNm, setClassNm] = useState(school?.classNm ?? '')
+  // 학년/반은 store에 직접 저장 (로컬 state 사용 X — 즉시 저장)
+  const grade = school?.grade ?? ''
+  const classNm = school?.classNm ?? ''
+  const setGrade = (v: string) => school && setSchool({ ...school, grade: v })
+  const setClassNm = (v: string) =>
+    school && setSchool({ ...school, classNm: v })
+
   const [weekStart, setWeekStart] = useState(() => weekStartOf(new Date()))
   const [items, setItems] = useState<TimetableItem[]>([])
   const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    setGrade(school?.grade ?? '')
-    setClassNm(school?.classNm ?? '')
-  }, [school?.grade, school?.classNm])
 
   useEffect(() => {
     if (!school || !grade || !classNm) return
@@ -88,11 +88,6 @@ export default function Timetable() {
   }
   const periods = Object.keys(grouped).sort((a, b) => Number(a) - Number(b))
 
-  const saveClass = () => {
-    if (!school) return
-    setSchool({ ...school, grade, classNm })
-  }
-
   const shiftWeek = (delta: number) => {
     const next = new Date(weekStart)
     next.setDate(next.getDate() + delta * 7)
@@ -113,7 +108,6 @@ export default function Timetable() {
               type="text"
               value={grade}
               onChange={(e) => setGrade(e.target.value)}
-              onBlur={saveClass}
               placeholder="3"
               className="w-20 px-3 py-2 rounded-xl glass-input"
             />
@@ -124,7 +118,6 @@ export default function Timetable() {
               type="text"
               value={classNm}
               onChange={(e) => setClassNm(e.target.value)}
-              onBlur={saveClass}
               placeholder="2"
               className="w-20 px-3 py-2 rounded-xl glass-input"
             />
