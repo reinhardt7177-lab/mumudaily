@@ -14,7 +14,56 @@ const fmt = (s: number) => {
   return `${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`
 }
 
+const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토']
+
+function ClockView({ fullscreen }: { fullscreen: boolean }) {
+  const [now, setNow] = useState(new Date())
+
+  useEffect(() => {
+    const id = window.setInterval(() => setNow(new Date()), 1000)
+    return () => clearInterval(id)
+  }, [])
+
+  const hh = now.getHours().toString().padStart(2, '0')
+  const mm = now.getMinutes().toString().padStart(2, '0')
+  const ss = now.getSeconds().toString().padStart(2, '0')
+
+  return (
+    <div
+      className={`text-center ${
+        fullscreen ? '' : 'glass-strong rounded-3xl p-12'
+      }`}
+    >
+      <div
+        className={`font-mono font-black tabular-nums tracking-tight ${
+          fullscreen
+            ? 'text-white drop-shadow-[0_0_60px_rgba(255,255,255,0.3)]'
+            : 'bg-gradient-to-br from-indigo-600 to-violet-700 bg-clip-text text-transparent'
+        } ${fullscreen ? 'text-[18rem] leading-none' : 'text-9xl'}`}
+      >
+        {hh}:{mm}
+        <span
+          className={`${
+            fullscreen ? 'text-[10rem]' : 'text-7xl'
+          } ${fullscreen ? 'text-slate-400' : 'text-slate-400'}`}
+        >
+          :{ss}
+        </span>
+      </div>
+      <div
+        className={`mt-6 font-medium ${
+          fullscreen ? 'text-2xl text-slate-300' : 'text-xl text-slate-500'
+        }`}
+      >
+        {now.getFullYear()}년 {now.getMonth() + 1}월 {now.getDate()}일{' '}
+        {WEEKDAYS[now.getDay()]}요일
+      </div>
+    </div>
+  )
+}
+
 export default function Timer() {
+  const [mode, setMode] = useState<'clock' | 'timer'>('clock')
   const [total, setTotal] = useState(300)
   const [remaining, setRemaining] = useState(300)
   const [running, setRunning] = useState(false)
@@ -106,103 +155,145 @@ export default function Timer() {
         </button>
       )}
 
-      <div className={fullscreen ? '' : 'max-w-2xl'}>
+      <div className={fullscreen ? '' : 'max-w-3xl'}>
         {!fullscreen && (
-          <h1 className="text-3xl font-bold tracking-tight mb-6 bg-gradient-to-br from-slate-800 to-slate-600 bg-clip-text text-transparent">
-            타이머
-          </h1>
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-br from-slate-800 to-slate-600 bg-clip-text text-transparent">
+              시계 및 타이머
+            </h1>
+            <div className="flex gap-1 bg-white/40 backdrop-blur-md rounded-xl p-1 border border-white/60">
+              <button
+                onClick={() => setMode('clock')}
+                className={`px-4 py-1.5 rounded-lg text-sm transition ${
+                  mode === 'clock'
+                    ? 'bg-white shadow-sm font-semibold text-indigo-700'
+                    : 'text-slate-500 hover:text-slate-700'
+                }`}
+              >
+                🕐 시계
+              </button>
+              <button
+                onClick={() => setMode('timer')}
+                className={`px-4 py-1.5 rounded-lg text-sm transition ${
+                  mode === 'timer'
+                    ? 'bg-white shadow-sm font-semibold text-indigo-700'
+                    : 'text-slate-500 hover:text-slate-700'
+                }`}
+              >
+                ⏱ 타이머
+              </button>
+            </div>
+          </div>
         )}
 
-        <div className="flex flex-wrap gap-2 mb-6 justify-center">
-          {presets.map((p) => (
-            <button
-              key={p.sec}
-              onClick={() => setMinutes(p.sec)}
-              className={`px-4 py-2 rounded-xl text-sm transition ${
-                total === p.sec
-                  ? fullscreen
-                    ? 'bg-white/90 text-slate-900 border border-white'
-                    : 'glass-btn-primary'
-                  : fullscreen
-                    ? 'border border-white/20 text-slate-300 hover:bg-white/10 backdrop-blur-md'
-                    : 'glass-btn text-slate-600'
+        {mode === 'clock' ? (
+          <>
+            <ClockView fullscreen={fullscreen} />
+            {!fullscreen && (
+              <div className="flex gap-3 justify-center mt-8">
+                <button
+                  onClick={() => setFullscreen(true)}
+                  className="px-6 py-3.5 rounded-2xl font-semibold glass-btn text-slate-600"
+                >
+                  ⛶ 전체화면
+                </button>
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            <div className="flex flex-wrap gap-2 mb-6 justify-center">
+              {presets.map((p) => (
+                <button
+                  key={p.sec}
+                  onClick={() => setMinutes(p.sec)}
+                  className={`px-4 py-2 rounded-xl text-sm transition ${
+                    total === p.sec
+                      ? fullscreen
+                        ? 'bg-white/90 text-slate-900 border border-white'
+                        : 'glass-btn-primary'
+                      : fullscreen
+                        ? 'border border-white/20 text-slate-300 hover:bg-white/10 backdrop-blur-md'
+                        : 'glass-btn text-slate-600'
+                  }`}
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
+
+            <div
+              className={`text-center mb-8 ${
+                fullscreen ? '' : 'glass-strong rounded-3xl p-12'
               }`}
             >
-              {p.label}
-            </button>
-          ))}
-        </div>
-
-        <div
-          className={`text-center mb-8 ${
-            fullscreen ? '' : 'glass-strong rounded-3xl p-12'
-          }`}
-        >
-          <div
-            className={`font-mono font-black tabular-nums tracking-tight ${
-              overtime
-                ? 'bg-gradient-to-br from-red-500 to-rose-600 bg-clip-text text-transparent'
-                : fullscreen
-                  ? 'text-white drop-shadow-[0_0_60px_rgba(255,255,255,0.3)]'
-                  : 'bg-gradient-to-br from-indigo-600 to-violet-700 bg-clip-text text-transparent'
-            } ${fullscreen ? 'text-[20rem] leading-none' : 'text-9xl'}`}
-          >
-            {overtime ? '+' : ''}
-            {fmt(remaining)}
-          </div>
-          {!fullscreen && (
-            <div className="mt-6 h-2 bg-white/40 rounded-full overflow-hidden backdrop-blur-md">
               <div
-                className={`h-full transition-all duration-500 ${
+                className={`font-mono font-black tabular-nums tracking-tight ${
                   overtime
-                    ? 'bg-gradient-to-r from-red-400 to-rose-500'
-                    : 'bg-gradient-to-r from-indigo-400 to-violet-500'
-                }`}
-                style={{ width: `${overtime ? 100 : progress * 100}%` }}
-              />
+                    ? 'bg-gradient-to-br from-red-500 to-rose-600 bg-clip-text text-transparent'
+                    : fullscreen
+                      ? 'text-white drop-shadow-[0_0_60px_rgba(255,255,255,0.3)]'
+                      : 'bg-gradient-to-br from-indigo-600 to-violet-700 bg-clip-text text-transparent'
+                } ${fullscreen ? 'text-[20rem] leading-none' : 'text-9xl'}`}
+              >
+                {overtime ? '+' : ''}
+                {fmt(remaining)}
+              </div>
+              {!fullscreen && (
+                <div className="mt-6 h-2 bg-white/40 rounded-full overflow-hidden backdrop-blur-md">
+                  <div
+                    className={`h-full transition-all duration-500 ${
+                      overtime
+                        ? 'bg-gradient-to-r from-red-400 to-rose-500'
+                        : 'bg-gradient-to-r from-indigo-400 to-violet-500'
+                    }`}
+                    style={{ width: `${overtime ? 100 : progress * 100}%` }}
+                  />
+                </div>
+              )}
             </div>
-          )}
-        </div>
 
-        <div className="flex gap-3 justify-center">
-          {running ? (
-            <button
-              onClick={pause}
-              className="px-8 py-3.5 rounded-2xl font-semibold text-white border border-white/30 transition"
-              style={{
-                background: 'linear-gradient(135deg, #f59e0b, #ea580c)',
-                boxShadow: '0 8px 24px -4px rgba(245, 158, 11, 0.4)',
-              }}
-            >
-              ⏸ 일시정지
-            </button>
-          ) : (
-            <button
-              onClick={start}
-              className="px-8 py-3.5 rounded-2xl font-semibold glass-btn-primary"
-            >
-              ▶ 시작
-            </button>
-          )}
-          <button
-            onClick={reset}
-            className={`px-6 py-3.5 rounded-2xl font-semibold transition ${
-              fullscreen
-                ? 'border border-white/20 text-slate-300 hover:bg-white/10 backdrop-blur-md'
-                : 'glass-btn text-slate-600'
-            }`}
-          >
-            ↺ 리셋
-          </button>
-          {!fullscreen && (
-            <button
-              onClick={() => setFullscreen(true)}
-              className="px-6 py-3.5 rounded-2xl font-semibold glass-btn text-slate-600"
-            >
-              ⛶ 전체화면
-            </button>
-          )}
-        </div>
+            <div className="flex gap-3 justify-center">
+              {running ? (
+                <button
+                  onClick={pause}
+                  className="px-8 py-3.5 rounded-2xl font-semibold text-white border border-white/30 transition"
+                  style={{
+                    background: 'linear-gradient(135deg, #f59e0b, #ea580c)',
+                    boxShadow: '0 8px 24px -4px rgba(245, 158, 11, 0.4)',
+                  }}
+                >
+                  ⏸ 일시정지
+                </button>
+              ) : (
+                <button
+                  onClick={start}
+                  className="px-8 py-3.5 rounded-2xl font-semibold glass-btn-primary"
+                >
+                  ▶ 시작
+                </button>
+              )}
+              <button
+                onClick={reset}
+                className={`px-6 py-3.5 rounded-2xl font-semibold transition ${
+                  fullscreen
+                    ? 'border border-white/20 text-slate-300 hover:bg-white/10 backdrop-blur-md'
+                    : 'glass-btn text-slate-600'
+                }`}
+              >
+                ↺ 리셋
+              </button>
+              {!fullscreen && (
+                <button
+                  onClick={() => setFullscreen(true)}
+                  className="px-6 py-3.5 rounded-2xl font-semibold glass-btn text-slate-600"
+                >
+                  ⛶ 전체화면
+                </button>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </div>
   )
