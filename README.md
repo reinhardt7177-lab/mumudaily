@@ -1,73 +1,122 @@
-# React + TypeScript + Vite
+# 무무데일리 (mumudaily)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**교사를 위한 학기 동반자** — 매일 교실에서 필요한 도구를 한 화면에 모은 웹앱.
+브라우저만 있으면 설치 없이 바로 사용. 모든 데이터는 내 브라우저에만 저장(서버 X).
 
-Currently, two official plugins are available:
+🌐 https://mumudaily.vercel.app
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 시작하기
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. 위 주소 접속
+2. **🏫 학교 검색하기** 클릭 → 학교 이름 입력 → 선택
+3. 학년·반 입력 (시간표 조회에 사용)
 
-## Expanding the ESLint configuration
+학교를 한 번 연결하면 NEIS에서 급식·학사일정·시간표를 자동으로 가져옵니다.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+> 데이터는 브라우저에만 저장돼요. 다른 PC/브라우저에서 보려면 **설정 → 데이터 → 내보내기**로 백업한 JSON을 그쪽에서 복원하세요.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 주요 기능
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 🌤️ 오늘
+하루의 모든 정보를 한눈에:
+- 날씨·체감온도·습도·미세먼지 (브라우저 위치 권한 허용 시)
+- 오늘의 급식 (NEIS 자동 조회)
+- 이번 달 학사일정
+- 다가오는 D-day
+
+### 🗓️ 시간표
+이번 주 1~6교시 시간표를 NEIS에서 자동으로 표시. 주 단위로 이동 가능.
+
+### 👥 학생 명단
+학급 학생 명단 관리. 학생을 클릭하면 **학생 통합 뷰**로 이동해서 그 학생의 숙제 제출 현황·관찰 메모를 한 번에 볼 수 있어요.
+
+### 📝 숙제
+숙제 만들기 → 학생별 제출 체크. 마감일 표시.
+
+### 🗒️ 관찰 메모
+학생별 일상 관찰 기록. 학기말 생기부 작성 때 유용.
+
+### ✅ 체크판
+일회성 체크리스트. 우유 먹은 사람, 알림장 가져온 사람 같은 거 빠르게 체크.
+
+### ⏳ D-day
+체험학습·시험·방학 등 중요 날짜 카운트다운. 오늘 페이지에도 자동으로 표시.
+
+### 🎯 뽑기
+학생 명단에서 무작위 뽑기. 발표·청소 당번 등에 활용.
+
+### 🕐 시계 및 타이머
+- **시계 모드**: 큰 디지털 시계 + 날짜·요일. 전체화면 지원 (교실 모니터 게시용).
+- **타이머 모드**: 1·3·5·10·15분 프리셋 카운트다운. 종료 시 비프음, 초과 시간도 표시.
+
+### 🧩 모둠 편성
+이름 명단으로 빠르게 모둠 자동 편성.
+
+### 📱 QR 코드
+학급 자료 공유용 QR 즉석 생성.
+
+---
+
+## 수업 시간 알림 (차임)
+
+**설정 → 수업 시간 알림** 탭에서:
+
+- **시업·종업 차임 켜기** — 평일에 자동으로 종이 울려요
+- **시업 차임** — 수업 시작 시각 (E5 + A5)
+- **종업 차임** — 수업 끝 시각 (A5 + D6)
+- **시작 1분 전 예비종** — 시작 1분 전 가벼운 두 번 알림 (B5 두 번 짧게)
+
+각 톤은 **▶ 미리듣기** 버튼으로 확인 가능.
+
+교시 시간표는 같은 패널에서 학교 시간에 맞춰 조정할 수 있어요. 기본값은 초등 표준(09:00 시작, 40분 수업, 10분 쉬는 시간).
+
+> 브라우저 탭이 백그라운드여도 차임은 울리지만, **노트북이 잠자기 모드면 안 울립니다.** 수업 중엔 화면 켜둔 채로 두세요.
+
+---
+
+## 데이터 백업·복원
+
+**설정 → 데이터** 탭:
+
+- **⬇ 내보내기** — 학생·숙제·메모·D-day·설정 전체를 JSON 한 파일로
+- **백업 복원** — 다른 PC에서 받은 JSON 파일 선택 → 덮어쓰기
+- **⚠ 모든 데이터 삭제** — 새 학년/학기 시작할 때
+
+---
+
+## 자주 묻는 질문
+
+**Q. 인터넷 끊기면 안 되나요?**
+A. 일단 한 번 접속해두면 데이터는 브라우저에 있어서 거의 다 작동해요. 단, 급식·학사일정·시간표는 NEIS에 실시간 조회라 인터넷이 필요합니다.
+
+**Q. 학교를 옮겼어요.**
+A. 설정 → 학교 → 학교 변경 또는 연결 해제 후 재검색.
+
+**Q. 다른 선생님께 추천하려면?**
+A. https://mumudaily.vercel.app 주소만 알려주세요. 각자 학교 연결하면 됩니다.
+
+**Q. 데이터가 갑자기 사라졌어요.**
+A. 브라우저의 사이트 데이터 삭제·시크릿 모드·다른 브라우저로 접속 → 모두 새 환경으로 인식돼요. 평소 **설정 → 데이터 → 내보내기**로 주기적 백업 권장.
+
+---
+
+## 개발자용
+
+```bash
+npm install
+npm run dev      # 개발 서버 (http://localhost:5173)
+npm run build    # 프로덕션 빌드
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- **스택**: React + TypeScript + Vite + Tailwind + Zustand (persist)
+- **외부 API**: NEIS Open API (학교/급식/학사/시간표), Open-Meteo (날씨/대기질)
+- **NEIS 키**: `.env.local`에 `VITE_NEIS_KEY=...` (선택, 없어도 동작하지만 rate limit 낮음)
+- **배포**: Vercel (`main` 브랜치 push 시 자동 빌드)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+학기 동반자 · MVP
